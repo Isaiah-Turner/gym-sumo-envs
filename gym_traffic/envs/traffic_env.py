@@ -105,7 +105,7 @@ class TrafficEnv(Env):
         return max(reward, 0)
 
     def _step(self, action):
-        action = self.action_space(action)
+        #action = self.action_space(action)
         self.start_sumo()
         self.sumo_step += 1
         assert (len(action) == len(self.lights))

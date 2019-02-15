@@ -4,15 +4,15 @@ import os
 
 
 class TrafficEnvSimple(TrafficEnv):
-    def __init__(self, mode="gui"):
+    def __init__(self, mode="gui", network="simple", prefix="traffic"):
         lights = [TrafficLightTwoWay(id="0", yield_time=5)]
         loops = ["loop{}".format(i) for i in range(12)]
         lanes = ["n_0_0", "s_0_0", "e_0_0", "w_0_0", "0_n_0", "0_s_0", "0_e_0", "0_w_0"]
-        basepath = os.path.join(os.path.dirname(__file__), "config", "simple")
-        netfile = os.path.join(basepath, "traffic.net.xml")
-        routefile = os.path.join(basepath, "traffic.rou.xml")
+        basepath = os.path.join(os.path.dirname(__file__), "config", network)
+        netfile = os.path.join(basepath, prefix + ".net.xml")
+        routefile = os.path.join(basepath,  prefix + ".rou.xml")
         guifile = os.path.join(basepath, "view.settings.xml")
-        addfile = os.path.join(basepath, "traffic.add.xml")
+        addfile = os.path.join(basepath,  prefix + ".add.xml")
         exitloops = ["loop4", "loop5", "loop6", "loop7"]
         super(TrafficEnvSimple, self).__init__(mode=mode, lights=lights, netfile=netfile, routefile=routefile,
                                                guifile=guifile, loops=loops, addfile=addfile, simulation_end=300,
