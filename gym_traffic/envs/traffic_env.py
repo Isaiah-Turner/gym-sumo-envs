@@ -10,6 +10,7 @@ import os, sys
 import numpy as np
 import math
 import time
+from gym_traffic.envs.traffic_lights import TrafficLightTwoWay, TrafficLight
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -48,7 +49,7 @@ class TrafficEnv(Env):
         self.pngfile = pngfile
         self.sumo_cmd = [binary] + args
         self.sumo_step = 0
-        self.lights = lights
+        self.lights = lights # is redefined for all non-simple (two-way) networks in start_sumo
         self.action_space = spaces.MultiDiscrete([[0, len(light.actions) - 1] for light in self.lights])
 
         trafficspace = spaces.Box(low=float('-inf'), high=float('inf'),
@@ -76,6 +77,9 @@ class TrafficEnv(Env):
             self.write_routes()
             traci.start(self.sumo_cmd)
             self.loops = [loopID for loopID in traci.inductionloop.getIDList()]
+            if not lights:
+                for lightID in traci.trafficlight.getIDList():
+                    self.lights.append(TrafficLight(lightID, ))
             for loopid in self.loops:
                 traci.inductionloop.subscribe(loopid, self.loop_variables)
             self.sumo_step = 0
