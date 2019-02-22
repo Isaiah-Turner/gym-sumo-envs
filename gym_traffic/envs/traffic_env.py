@@ -29,7 +29,7 @@ class TrafficEnv(Env):
         self.sleep_between_restart = sleep_between_restart
         self.mode = mode
         self._seed()
-        self.loops = loops
+        self.loops = [] #loops are defined in start_sumo
         self.exitloops = exitloops
         self.loop_variables = [tc.LAST_STEP_MEAN_SPEED, tc.LAST_STEP_TIME_SINCE_DETECTION, tc.LAST_STEP_VEHICLE_NUMBER]
         self.lanes = lanes
@@ -75,6 +75,7 @@ class TrafficEnv(Env):
         if not self.sumo_running:
             self.write_routes()
             traci.start(self.sumo_cmd)
+            self.loops = [loopID for loopID in traci.inductionloop.getIDList()]
             for loopid in self.loops:
                 traci.inductionloop.subscribe(loopid, self.loop_variables)
             self.sumo_step = 0

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 02/22/19 09:55:25 by Eclipse SUMO Version 1.0.1
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <input>
+        <net-file value="c:\users\isaia\onedrive\documents\github\gym-sumo-envs\gym_traffic\envs\config\T-Intersection\tIntersection.net.xml"/>
+        <route-files value="tmp.rou.xml"/>
+        <additional-files value="c:\users\isaia\onedrive\documents\github\gym-sumo-envs\gym_traffic\envs\config\T-Intersection\tIntersection.add.xml"/>
+    </input>
+
+    <report>
+        <no-step-log value="true"/>
+    </report>
+
+    <traci_server>
+        <remote-port value="62362"/>
+    </traci_server>
+
+</configuration>
+-->
+
+<meandata xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/meandata_file.xsd">
+</meandata>
