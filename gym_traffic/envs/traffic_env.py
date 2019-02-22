@@ -126,11 +126,11 @@ class TrafficEnv(Env):
             traci.gui.screenshot("View #0", self.pngfile)
 
     def _observation(self):
-        res = traci.inductionloop.getSubscriptionResults()
         obs = []
         for loop in self.loops:
+            res = traci.inductionloop.getSubscriptionResults(loop)
             for var in self.loop_variables:
-                obs.append(res[loop][var])
+                obs.append(res[var])
         trafficobs = np.array(obs)
         lightobs = [light.state for light in self.lights]
         return (trafficobs, lightobs)

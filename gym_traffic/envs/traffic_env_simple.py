@@ -1,5 +1,5 @@
-from traffic_env import TrafficEnv
-from traffic_lights import TrafficLightTwoWay
+from gym_traffic.envs.traffic_env import TrafficEnv
+from gym_traffic.envs.traffic_lights import TrafficLightTwoWay
 import os
 
 

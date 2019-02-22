@@ -6,9 +6,9 @@ import time
 from tqdm import tqdm
 monitor = False
 #env = gym.make('Traffic-Simple-gui-v0')
-#env = gym.make('Traffic-Simple-cli-v0')
+env = gym.make('Traffic-Simple-cli-v0')
 print(gym.envs.registry.all())
-env = gym.make('Traffic-tIntersection-cli-v0')
+#env = gym.make('Traffic-tIntersection-cli-v0')
 print(env.action_space)
 print(env.observation_space)
 #env = gym.make('Traffic-Simple-gui-v0')
