@@ -7,7 +7,6 @@ from tqdm import tqdm
 monitor = False
 #env = gym.make('Traffic-Simple-gui-v0')
 #env = gym.make('Traffic-Simple-cli-v0')
-print(gym.envs.registry.all())
 env = gym.make('Traffic-tIntersection-cli-v0')
 print(env.action_space)
 print(env.observation_space)
@@ -19,8 +18,8 @@ for i_episode in tqdm(range(500)):
     for t in tqdm(range(1000)):
         #env.render()
         #print(observation)
-        action = env.action_space.sample()
-
+        action = env.env.action_space.sample()  # two envs are needed. The first is a time limited wrapper, the second is the actual env.
+        print(action)
         #time.sleep(1)
         observation, reward, done, info = env.step(action)
         #print "Reward: {}".format(reward)

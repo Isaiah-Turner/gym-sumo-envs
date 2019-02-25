@@ -24,7 +24,7 @@ class TrafficEnv(Env):
 
     def __init__(self, lights, netfile, routefile, guifile, addfile, loops=[], lanes=[], exitloops=[],
                  tmpfile="tmp.rou.xml",
-                 pngfile="tmp.png", mode="gui", detector="detector0", simulation_end=3600, sleep_between_restart=1):
+                 pngfile="tmp.png", mode="gui", simulation_end=3600, sleep_between_restart=1):
         # "--end", str(simulation_end),
         self.simulation_end = simulation_end
         self.sleep_between_restart = sleep_between_restart
@@ -34,7 +34,7 @@ class TrafficEnv(Env):
         self.exitloops = exitloops
         self.loop_variables = [tc.LAST_STEP_MEAN_SPEED, tc.LAST_STEP_TIME_SINCE_DETECTION, tc.LAST_STEP_VEHICLE_NUMBER]
         self.lanes = lanes
-        self.detector = detector
+        self.detectors = []
         args = ["--net-file", netfile, "--route-files", tmpfile, "--additional-files", addfile]
         if mode == "gui":
             binary = "sumo-gui"
@@ -49,8 +49,8 @@ class TrafficEnv(Env):
         self.pngfile = pngfile
         self.sumo_cmd = [binary] + args
         self.sumo_step = 0
-        self.lights = lights # is redefined for all non-simple (two-way) networks in start_sumo
-        self.action_space = spaces.MultiDiscrete([[0, len(light.actions) - 1] for light in self.lights])
+        self.lights = lights  # is redefined for all non-simple (two-way) networks in start_sumo
+        self.action_space = spaces.MultiDiscrete([[0, len(light.actions) - 1] for light in self.lights])  # is similarly redefined
 
         trafficspace = spaces.Box(low=float('-inf'), high=float('inf'),
                                   shape=(len(self.loops) * len(self.loop_variables),))
@@ -66,7 +66,7 @@ class TrafficEnv(Env):
     def write_routes(self):
         self.route_info = self.route_sample()
         with open(self.tmpfile, 'w') as f:
-            f.write(Template(self.route).substitute(self.route_info))
+            f.write(Template(self.route).substitute(self.route_info)) 
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -77,11 +77,14 @@ class TrafficEnv(Env):
             self.write_routes()
             traci.start(self.sumo_cmd)
             self.loops = [loopID for loopID in traci.inductionloop.getIDList()]
-            if not lights:
-                for lightID in traci.trafficlight.getIDList():
-                    self.lights.append(TrafficLight(lightID, ))
             for loopid in self.loops:
                 traci.inductionloop.subscribe(loopid, self.loop_variables)
+            self.detectors = [entryexitID for entryexitID in traci.multientryexit.getIDList()]
+            if not self.lights:
+                for lightID in traci.trafficlight.getIDList():
+                    temp = traci.trafficlight.getCompleteRedYellowGreenDefinition(lightID)
+                    self.lights.append(TrafficLight(lightID, [phase._phaseDef for phase in temp[0]._phases]))
+            self.action_space = spaces.MultiDiscrete([[0, len(light.actions) - 1] for light in self.lights])
             self.sumo_step = 0
             self.sumo_running = True
             self.screenshot()
@@ -96,9 +99,11 @@ class TrafficEnv(Env):
         # for lane in self.lanes:
         #    reward -= traci.lane.getWaitingTime(lane)
         # return reward
-        speed = traci.multientryexit.getLastStepMeanSpeed(self.detector)
-        count = traci.multientryexit.getLastStepVehicleNumber(self.detector)
-        reward = speed * count
+        reward = 0
+        for d in self.detectors:
+            speed = traci.multientryexit.getLastStepMeanSpeed(d)
+            count = traci.multientryexit.getLastStepVehicleNumber(d)
+            reward += speed * count
         # print("Speed: {}".format(traci.multientryexit.getLastStepMeanSpeed(self.detector)))
         # print("Count: {}".format(traci.multientryexit.getLastStepVehicleNumber(self.detector)))
         # reward = np.sqrt(speed)
