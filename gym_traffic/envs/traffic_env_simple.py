@@ -15,7 +15,7 @@ class TrafficEnvSimple(TrafficEnv):
         addfile = os.path.join(basepath,  prefix + ".add.xml")
         exitloops = ["loop4", "loop5", "loop6", "loop7"]
         super(TrafficEnvSimple, self).__init__(mode=mode, lights=lights, netfile=netfile, routefile=routefile,
-                                               guifile=guifile, loops=loops, addfile=addfile, simulation_end=300,
+                                               addfile=addfile, guifile=guifile, simulation_end=300,
                                                lanes=lanes, exitloops=exitloops)
 
     def route_sample(self):

@@ -22,7 +22,7 @@ else:
 class TrafficEnv(Env):
     metadata = {'render.modes': ['human', 'rgb_array']}
 
-    def __init__(self, lights, netfile, routefile, guifile, addfile, loops=[], lanes=[], exitloops=[],
+    def __init__(self, lights, netfile, routefile, addfile, guifile="", lanes=[], exitloops=[],
                  tmpfile="tmp.rou.xml",
                  pngfile="tmp.png", mode="gui", simulation_end=3600, sleep_between_restart=1):
         # "--end", str(simulation_end),
@@ -38,7 +38,7 @@ class TrafficEnv(Env):
         args = ["--net-file", netfile, "--route-files", tmpfile, "--additional-files", addfile]
         if mode == "gui":
             binary = "sumo-gui"
-            args += ["-S", "-Q", "--gui-settings-file", guifile]
+            args += ["-S", "-Q"]
         else:
             binary = "sumo"
             args += ["--no-step-log"]
