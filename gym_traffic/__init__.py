@@ -1,5 +1,50 @@
 from gym.envs.registration import register
-
+# DC 2way
+register(
+    id='Traffic-2way-cli-v0',
+    entry_point='gym_traffic.envs:TrafficEnvSimple',
+    tags={'wrapper_config.TimeLimit.max_episode_steps': 1000},
+    kwargs={"mode": "cli", "network": "DC2WayIntersection", "prefix": "2way"},
+    nondeterministic=True
+)
+register(
+    id='Traffic-2way-cli-v0',
+    entry_point='gym_traffic.envs:TrafficEnvSimple',
+    tags={'wrapper_config.TimeLimit.max_episode_steps': 1000},
+    kwargs={"mode": "gui", "network": "DC2WayIntersection", "prefix": "2way"},
+    nondeterministic=True
+)
+# yIntersection
+register(
+    id='Traffic-litteRiver-cli-v0',
+    entry_point='gym_traffic.envs:TrafficEnvSimple',
+    tags={'wrapper_config.TimeLimit.max_episode_steps': 1000},
+    kwargs={"mode": "cli", "network": "LittleRiver4WayIntersection", "prefix": "littleriver"},
+    nondeterministic=True
+)
+register(
+    id='Traffic-litteRiver-cli-v0',
+    entry_point='gym_traffic.envs:TrafficEnvSimple',
+    tags={'wrapper_config.TimeLimit.max_episode_steps': 1000},
+    kwargs={"mode": "gui", "network": "LittleRiver4WayIntersection", "prefix": "littleriver"},
+    nondeterministic=True
+)
+# yIntersection
+register(
+    id='Traffic-yIntersection-cli-v0',
+    entry_point='gym_traffic.envs:TrafficEnvSimple',
+    tags={'wrapper_config.TimeLimit.max_episode_steps': 1000},
+    kwargs={"mode": "cli", "network": "Y-Intersection", "prefix": "yIntersection"},
+    nondeterministic=True
+)
+register(
+    id='Traffic-yIntersection-cli-v0',
+    entry_point='gym_traffic.envs:TrafficEnvSimple',
+    tags={'wrapper_config.TimeLimit.max_episode_steps': 1000},
+    kwargs={"mode": "gui", "network": "Y-Intersection", "prefix": "yIntersection"},
+    nondeterministic=True
+)
+# tIntersection
 register(
     id='Traffic-tIntersection-cli-v0',
     entry_point='gym_traffic.envs:TrafficEnvSimple',
@@ -15,7 +60,7 @@ register(
     kwargs={"mode": "gui", "network": "T-Intersection", "prefix": "tIntersection"},
     nondeterministic=True
 )
-
+#simple two way
 register(
     id='Traffic-Simple-gui-v0',
     entry_point='gym_traffic.envs:TrafficEnvSimple',
