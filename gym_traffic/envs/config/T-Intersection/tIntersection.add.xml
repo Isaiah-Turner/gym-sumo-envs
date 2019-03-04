@@ -13,16 +13,16 @@
 	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_WE_1_0" lane="WE_1_0" length="42.8" pos="0"/>
 	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_WE_1_1" lane="WE_1_1" length="42.8" pos="0"/>
     <e3Detector id="e3_gneJ1" freq="1" file="out.xml">
-        <detEntry lane="EW_1_0" pos="50.00"/>
-        <detEntry lane="NS_1_0" pos="50.00"/>
-        <detEntry lane="WE_1_0" pos="50.00"/>
-		<detEntry lane="WE_1_1" pos="50.00"/>
-        <detEntry lane="EW_1_1" pos="50.00"/>
-		<detExit lane="WE_2_0" pos="-50.00"/>
-		<detExit lane="WE_2_1" pos="-50.00"/>
-		<detExit lane="EW_2_0" pos="-50.00"/>
-		<detExit lane="EW_2_1" pos="-50.00"/>
-		<detExit lane="SN_2_0" pos="-50.00"/>
+        <detEntry lane="EW_1_0" pos="46.4"/>
+        <detEntry lane="NS_1_0" pos="44.80"/>
+        <detEntry lane="WE_1_0" pos="46.4"/>
+		<detEntry lane="WE_1_1" pos="46.4"/>
+        <detEntry lane="EW_1_1" pos="46.4"/>
+		<detExit lane="WE_2_0" pos="-46.4"/>
+		<detExit lane="WE_2_1" pos="-46.4"/>
+		<detExit lane="EW_2_0" pos="-46.4"/>
+		<detExit lane="EW_2_1" pos="-46.4"/>
+		<detExit lane="SN_2_0" pos="-44.80"/>
         
     </e3Detector>
 	<edgeData file="tIntersection_traffic.dump.xml" freq="20" id="Traffic Measures" />
