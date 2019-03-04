@@ -5,6 +5,20 @@
 		<phase duration="59.521" state="rrrGGGrr" />
 		<phase duration="1.736" state="rrryyyrr" />
 	</tlLogic>
+	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_-6055187#2_0" lane="-6055187#2_0" length="79.68" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_215306712#0_0" lane="215306712#0_0" length="92.9" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_6055187#0_0" lane="6055187#0_0" length="55.879999999999995" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_6055187#0_1" lane="6055187#0_1" length="55.879999999999995" pos="0"/>
+	<e3Detector id="e3_49765167" freq="1" file="out.xml">
+        <detEntry lane="-6055187#2_0" pos="50.00"/>
+        <detEntry lane="215306712#0_0" pos="50.00"/>
+        <detEntry lane="6055187#0_0" pos="50.00"/>
+        <detEntry lane="6055187#0_1" pos="50.00"/>
+        <detExit lane="215306712#1_0" pos="-50.00"/>
+        <detExit lane="6055187#2_0" pos="-50.00"/>
+        <detExit lane="-6055187#1_0" pos="-50.00"/>
+        <detExit lane="6055187#2_1" pos="-50.00"/>
+    </e3Detector>
 	<edgeData file="2way_traffic.dump.xml" freq="20" id="Traffic Measures" />
 	<edgeData file="2way_pollution.dump.xml" freq="20" id="Emission Data" type="emissions" />
 	<edgeData file="2way_noise.dump.xml" freq="20" id="Noise Data" type="harmonoise" />

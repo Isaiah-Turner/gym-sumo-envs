@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 02/25/19 09:55:06 by Eclipse SUMO GUI Version 1.0.1
+<!-- generated on 03/01/19 11:35:13 by Eclipse SUMO GUI Version 1.0.1
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
 
     <input>
@@ -10,7 +10,7 @@
     </input>
 
     <traci_server>
-        <remote-port value="49858"/>
+        <remote-port value="56479"/>
     </traci_server>
 
     <gui_only>
@@ -30,12 +30,36 @@
         <edge id="WE_1" sampledSeconds="59.94" noise="71.63" traveltime="12.71"/>
         <edge id="WE_2" sampledSeconds="2.34" noise="59.60" traveltime="10.08"/>
     </interval>
-    <interval begin="20.00" end="37.00" id="Noise Data">
-        <edge id="EW_1" sampledSeconds="122.96" noise="73.42" traveltime="19.07"/>
-        <edge id="EW_2" sampledSeconds="26.88" noise="70.26" traveltime="7.87"/>
-        <edge id="NS_1" sampledSeconds="121.42" noise="71.01" traveltime="32.19"/>
-        <edge id="SN_2" sampledSeconds="45.02" noise="72.86" traveltime="7.35"/>
-        <edge id="WE_1" sampledSeconds="74.50" noise="73.50" traveltime="11.95"/>
-        <edge id="WE_2" sampledSeconds="36.43" noise="69.18" traveltime="7.88"/>
+    <interval begin="20.00" end="40.00" id="Noise Data">
+        <edge id="EW_1" sampledSeconds="149.96" noise="73.47" traveltime="19.95"/>
+        <edge id="EW_2" sampledSeconds="32.18" noise="70.43" traveltime="7.85"/>
+        <edge id="NS_1" sampledSeconds="149.42" noise="70.76" traveltime="35.72"/>
+        <edge id="SN_2" sampledSeconds="49.02" noise="72.29" traveltime="7.31"/>
+        <edge id="WE_1" sampledSeconds="89.50" noise="73.52" traveltime="12.26"/>
+        <edge id="WE_2" sampledSeconds="42.43" noise="68.95" traveltime="7.82"/>
+    </interval>
+    <interval begin="40.00" end="60.00" id="Noise Data">
+        <edge id="EW_1" sampledSeconds="187.37" noise="73.72" traveltime="22.20"/>
+        <edge id="EW_2" sampledSeconds="35.77" noise="69.41" traveltime="7.92"/>
+        <edge id="NS_1" sampledSeconds="198.64" noise="68.42" traveltime="79.65"/>
+        <edge id="SN_2" sampledSeconds="40.34" noise="71.47" traveltime="7.57"/>
+        <edge id="WE_1" sampledSeconds="101.68" noise="72.75" traveltime="15.65"/>
+        <edge id="WE_2" sampledSeconds="39.29" noise="69.96" traveltime="7.45"/>
+    </interval>
+    <interval begin="60.00" end="80.00" id="Noise Data">
+        <edge id="EW_1" sampledSeconds="206.98" noise="73.97" traveltime="26.83"/>
+        <edge id="EW_2" sampledSeconds="31.31" noise="68.25" traveltime="8.17"/>
+        <edge id="NS_1" sampledSeconds="220.26" noise="68.21" traveltime="174.64"/>
+        <edge id="SN_2" sampledSeconds="44.46" noise="71.49" traveltime="7.56"/>
+        <edge id="WE_1" sampledSeconds="134.50" noise="73.83" traveltime="17.64"/>
+        <edge id="WE_2" sampledSeconds="47.49" noise="71.29" traveltime="7.71"/>
+    </interval>
+    <interval begin="80.00" end="99.00" id="Noise Data">
+        <edge id="EW_1" sampledSeconds="212.19" noise="73.12" traveltime="32.89"/>
+        <edge id="EW_2" sampledSeconds="27.35" noise="69.37" traveltime="7.95"/>
+        <edge id="NS_1" sampledSeconds="210.00" noise="66.93" traveltime="230.45"/>
+        <edge id="SN_2" sampledSeconds="31.32" noise="70.52" traveltime="7.42"/>
+        <edge id="WE_1" sampledSeconds="172.60" noise="73.58" traveltime="24.81"/>
+        <edge id="WE_2" sampledSeconds="40.57" noise="70.78" traveltime="7.42"/>
     </interval>
 </meandata>

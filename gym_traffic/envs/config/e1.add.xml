@@ -1,0 +1,13 @@
+<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_-468510417#1_0" lane="-468510417#1_0" length="-21.94" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_-468510417#1_1" lane="-468510417#1_1" length="-21.94" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_468510415#1_0" lane="468510415#1_0" length="-28.11" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_468510415#1_1" lane="468510415#1_1" length="-28.11" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_468510427#0_0" lane="468510427#0_0" length="-21.78" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_468510427#0_1" lane="468510427#0_1" length="-21.78" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_468510427#0_2" lane="468510427#0_2" length="-21.78" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_468510427#0_3" lane="468510427#0_3" length="-21.78" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_gneE0_0" lane="gneE0_0" length="-21.31" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_gneE0_1" lane="gneE0_1" length="-21.31" pos="0"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_gneE0_2" lane="gneE0_2" length="-21.31" pos="0"/>
+</additional>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 03/01/19 11:55:43 by Eclipse SUMO GUI Version 1.0.1
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
+
+    <input>
+        <net-file value="c:\users\isaia\onedrive\documents\github\gym-sumo-envs\gym_traffic\envs\config\LittleRiver4WayIntersection\littleriver.net.xml"/>
+        <route-files value="tmp.rou.xml"/>
+        <additional-files value="c:\users\isaia\onedrive\documents\github\gym-sumo-envs\gym_traffic\envs\config\LittleRiver4WayIntersection\littleriver.add.xml"/>
+    </input>
+
+    <traci_server>
+        <remote-port value="57225"/>
+    </traci_server>
+
+    <gui_only>
+        <quit-on-end value="true"/>
+        <start value="true"/>
+    </gui_only>
+
+</configuration>
+-->
+
+<detector xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/det_e1_file.xsd">
+</detector>
