@@ -102,10 +102,11 @@ def writeEntryExit(options, edge, detector_xml, writeExit=True):
     input_edges = network.getDownstreamEdges(
         edge, options.requested_detector_length, stopOnTLS, stopOnTurnaround)
     input_edges.sort(key=lambda vals: vals[0].getID())
+    print(input_edges)
     for firstEdge, position, intermediate, aborted in input_edges:
         if aborted:
             position = .1
-        position = max(position, min(options.minPos, firstEdge.getLength()))
+        position = firstEdge.getLength()/2.
         for lane in firstEdge.getLanes():
             detector_entry_xml = detector_xml.addChild("detEntry")
             detector_entry_xml.setAttribute("lane", lane.getID())
@@ -124,7 +125,7 @@ def writeEntryExit(options, edge, detector_xml, writeExit=True):
             for lane in edge.getLanes():
                 detector_exit_xml = detector_xml.addChild("detExit")
                 detector_exit_xml.setAttribute("lane", lane.getID())
-                detector_exit_xml.setAttribute("pos", "-.1")
+                detector_exit_xml.setAttribute("pos", -lane.getLength()/2)
 
 
 if __name__ == "__main__":
