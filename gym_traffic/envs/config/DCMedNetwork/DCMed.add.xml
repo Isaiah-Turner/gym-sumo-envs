@@ -1,4 +1,61 @@
-<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+<additional>   
+   <tlLogic id="2594721970" offset="0" programID="1" type="static">
+        <phase duration="44.856" state="GGGrrr" />
+        <phase duration="0.144" state="yyyrrr" />
+        <phase duration="44.856" state="rrrGGG" />
+        <phase duration="0.144" state="rrryyy" />
+    </tlLogic>
+    <tlLogic id="49759090" offset="0" programID="2" type="static">
+        <phase duration="89.427" state="GGG" />
+        <phase duration="0.286" state="yyy" />
+        <phase duration="0.286" state="rrr" />
+    </tlLogic>
+    <tlLogic id="49759091" offset="0" programID="3" type="static">
+        <phase duration="44.856" state="GGGG" />
+        <phase duration="0.144" state="yyyy" />
+        <phase duration="44.856" state="GGGG" />
+        <phase duration="0.144" state="yyyy" />
+    </tlLogic>
+    <tlLogic id="49787926" offset="0" programID="4" type="static">
+        <phase duration="44.856" state="GGG" />
+        <phase duration="0.144" state="yyy" />
+        <phase duration="44.856" state="GGG" />
+        <phase duration="0.144" state="yyy" />
+    </tlLogic>
+    <tlLogic id="49787931" offset="0" programID="5" type="static">
+        <phase duration="44.856" state="GGGrr" />
+        <phase duration="0.144" state="yyyrr" />
+        <phase duration="44.856" state="GrGGG" />
+        <phase duration="0.144" state="yryyy" />
+    </tlLogic>
+    <tlLogic id="49787936" offset="0" programID="6" type="static">
+        <phase duration="44.776" state="GgrrGG" />
+        <phase duration="0.144" state="yyrryy" />
+        <phase duration="44.936" state="rrGGGr" />
+        <phase duration="0.144" state="rryyyr" />
+    </tlLogic>
+    <tlLogic id="49807115" offset="0" programID="7" type="static">
+        <phase duration="89.427" state="GGGG" />
+        <phase duration="0.286" state="yyyy" />
+        <phase duration="0.286" state="rrrr" />
+    </tlLogic>
+    <tlLogic id="49831064" offset="0" programID="8" type="static">
+        <phase duration="44.856" state="GrrGg" />
+        <phase duration="0.144" state="yrryy" />
+        <phase duration="44.856" state="rGGrr" />
+        <phase duration="0.144" state="ryyrr" />
+    </tlLogic>
+    <tlLogic id="49831070" offset="0" programID="9" type="static">
+        <phase duration="44.856" state="rrGGGg" />
+        <phase duration="0.144" state="rryyyy" />
+        <phase duration="44.856" state="GGGrrr" />
+        <phase duration="0.144" state="yyyrrr" />
+    </tlLogic>
+    <tlLogic id="cluster_2399740768_2594721961" offset="0" programID="10" type="static">
+        <phase duration="89.427" state="GGGG" />
+        <phase duration="0.286" state="yyyy" />
+        <phase duration="0.286" state="rrrr" />
+	<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
     <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_-50515734#0_0" lane="-50515734#0_0" length="66.83000000000001" pos="0"/>
     <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_130715044_0" lane="130715044_0" length="27.95" pos="1.4155343563970746e-15"/>
     <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_130715044_1" lane="130715044_1" length="27.95" pos="1.4155343563970746e-15"/>
@@ -33,4 +90,8 @@
     <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_6056826_0" lane="6056826_0" length="46.3" pos="1.4155343563970746e-15"/>
     <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_6062713_0" lane="6062713_0" length="44.6" pos="1.4155343563970746e-15"/>
     <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_6062713_1" lane="6062713_1" length="44.6" pos="1.4155343563970746e-15"/>
+
+	<edgeData file="DCMed_traffic.dump.xml" freq="20" id="Traffic Measures" />
+	<edgeData file="DCMed_pollution.dump.xml" freq="20" id="Emission Data" type="emissions" />
+	<edgeData file="DCMed_noise.dump.xml" freq="20" id="Noise Data" type="harmonoise" />
 </additional>

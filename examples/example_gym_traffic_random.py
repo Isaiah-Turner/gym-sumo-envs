@@ -27,7 +27,7 @@ for i_episode in tqdm(range(500)):
         print(observation[1])
         print("Reward: ", end="")
         print(reward)
-        print("Done: " , end="")
+        print("Done: ", end="")
         print(done)
         print("Info: ", end="")
         print(info)
