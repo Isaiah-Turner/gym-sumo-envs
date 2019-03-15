@@ -85,6 +85,10 @@ class TrafficEnv(Env):
                     temp = traci.trafficlight.getCompleteRedYellowGreenDefinition(lightID)
                     self.lights.append(TrafficLight(lightID, [phase._phaseDef for phase in temp[0]._phases]))
             self.action_space = spaces.MultiDiscrete([[0, len(light.actions) - 1] for light in self.lights])
+            trafficspace = spaces.Box(low=float('-inf'), high=float('inf'),
+                                      shape=(len(self.loops) * len(self.loop_variables),))
+            lightspaces = [spaces.Discrete(len(light.actions)) for light in self.lights]
+            self.observation_space = spaces.Tuple([trafficspace] + lightspaces)
             self.sumo_step = 0
             self.sumo_running = True
             self.screenshot()

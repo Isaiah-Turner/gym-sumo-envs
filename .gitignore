@@ -92,4 +92,6 @@ ENV/
 /examples/tmp.rou.xml
 /gym_traffic/envs/config/simple/out.xml
 /.idea
+#Sumo stuff
 *.dump.xml
+out.xml

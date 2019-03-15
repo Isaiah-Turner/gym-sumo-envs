@@ -1,4 +1,19 @@
 from gym.envs.registration import register
+# DC Medium network
+register(
+    id='Traffic-DCMed-cli-v0',
+    entry_point='gym_traffic.envs:TrafficEnvSimple',
+    tags={'wrapper_config.TimeLimit.max_episode_steps': 1000},
+    kwargs={"mode": "cli", "network": "DCMedNetwork", "prefix": "DCMed"},
+    nondeterministic=True
+)
+register(
+    id='Traffic-DCMed-gui-v0',
+    entry_point='gym_traffic.envs:TrafficEnvSimple',
+    tags={'wrapper_config.TimeLimit.max_episode_steps': 1000},
+    kwargs={"mode": "gui", "network": "DCMedNetwork", "prefix": "DCMed"},
+    nondeterministic=True
+)
 # DC 2way
 register(
     id='Traffic-2way-cli-v0',
