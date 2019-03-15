@@ -8,7 +8,7 @@ register(
     nondeterministic=True
 )
 register(
-    id='Traffic-2way-cli-v0',
+    id='Traffic-2way-gui-v0',
     entry_point='gym_traffic.envs:TrafficEnvSimple',
     tags={'wrapper_config.TimeLimit.max_episode_steps': 1000},
     kwargs={"mode": "gui", "network": "DC2WayIntersection", "prefix": "2way"},
@@ -23,7 +23,7 @@ register(
     nondeterministic=True
 )
 register(
-    id='Traffic-litteRiver-cli-v0',
+    id='Traffic-litteRiver-gui-v0',
     entry_point='gym_traffic.envs:TrafficEnvSimple',
     tags={'wrapper_config.TimeLimit.max_episode_steps': 1000},
     kwargs={"mode": "gui", "network": "LittleRiver4WayIntersection", "prefix": "littleriver"},
@@ -38,7 +38,7 @@ register(
     nondeterministic=True
 )
 register(
-    id='Traffic-yIntersection-cli-v0',
+    id='Traffic-yIntersection-gui-v0',
     entry_point='gym_traffic.envs:TrafficEnvSimple',
     tags={'wrapper_config.TimeLimit.max_episode_steps': 1000},
     kwargs={"mode": "gui", "network": "Y-Intersection", "prefix": "yIntersection"},
