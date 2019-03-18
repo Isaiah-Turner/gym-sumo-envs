@@ -127,6 +127,11 @@ def writeEntryExit(options, edge, detector_xml, writeExit=True):
                 detector_exit_xml.setAttribute("lane", lane.getID())
                 detector_exit_xml.setAttribute("pos", -lane.getLength()/2)
 
+def writeExitLane(options, lane, detector_xml, writeExit=True):
+    print(lane)
+    detector_exit_xml = detector_xml.addChild("detExit")
+    detector_exit_xml.setAttribute("lane", lane.getID())
+    detector_exit_xml.setAttribute("pos", -lane.getLength() / 2)
 
 if __name__ == "__main__":
     # pylint: disable-msg=C0103
@@ -136,12 +141,13 @@ if __name__ == "__main__":
 
     logging.info("Reading net...")
     network = sumolib.net.readNet(options.net_file)
-
+    # print(tl.getControlledLanes() for tl in network.getTrafficLights())
     logging.info("Generating detectors...")
     detectors_xml = sumolib.xml.create_document("additional")
     generated_detectors = 0
 
     tlsList, getEdges = network._tlss, sumolib.net.TLS.getEdges
+    # print(sumolib.net.node.Node.getOutgoing())
     if options.junctionIDs:
         tlsList = [network.getNode(n) for n in options.junctionIDs.split(',')]
         getEdges = sumolib.net.node.Node.getIncoming
@@ -153,10 +159,16 @@ if __name__ == "__main__":
             detector_xml.setAttribute("freq", str(options.frequency))
             detector_xml.setAttribute("file", options.results)
             generated_detectors += 1
-            writeExit = True
+            writeExit = False
+            print([" ".join([i[0].getID(), i[1].getID()]) for i in tls.getConnections()])
+            print("----------")
+            #print(getEdges(tls))
             for edge in sorted(getEdges(tls), key=sumolib.net.edge.Edge.getID):
+                # print(sumolib.net.node.Node.getOutgoing(tls))
                 writeEntryExit(options, edge, detector_xml, writeExit)
-                writeExit = not options.interior
+                # writeExit = not options.interior
+            for lane in sorted(tls.getConnections(), key=lambda x: x[0].getID()):
+                writeExitLane(options, lane[1], detector_xml, True)
 
         else:
             for edge in sorted(getEdges(tls), key=sumolib.net.edge.Edge.getID):
