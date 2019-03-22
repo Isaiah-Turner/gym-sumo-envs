@@ -49,16 +49,10 @@ class TrafficEnv(Env):
         self.pngfile = pngfile
         self.sumo_cmd = [binary] + args
         self.sumo_step = 0
-        self.lights = lights  # is redefined for all non-simple (two-way) networks in start_sumo
-        self.action_space = spaces.MultiDiscrete([[0, len(light.actions) - 1] for light in self.lights])  # is similarly redefined
-
-        trafficspace = spaces.Box(low=float('-inf'), high=float('inf'),
-                                  shape=(len(self.loops) * len(self.loop_variables),))
-        lightspaces = [spaces.Discrete(len(light.actions)) for light in self.lights]
-        self.observation_space = spaces.Tuple([trafficspace] + lightspaces)
-
         self.sumo_running = False
         self.viewer = None
+        self.start_sumo()
+        self.stop_sumo()
 
     def relative_path(self, *paths):
         os.path.join(os.path.dirname(__file__), *paths)
@@ -80,15 +74,15 @@ class TrafficEnv(Env):
             for loopid in self.loops:
                 traci.inductionloop.subscribe(loopid, self.loop_variables)
             self.detectors = [entryexitID for entryexitID in traci.multientryexit.getIDList()]
-            if not self.lights:
-                for lightID in traci.trafficlight.getIDList():
-                    temp = traci.trafficlight.getCompleteRedYellowGreenDefinition(lightID)
-                    self.lights.append(TrafficLight(lightID, [phase._phaseDef for phase in temp[0]._phases]))
-            self.action_space = spaces.MultiDiscrete([[0, len(light.actions) - 1] for light in self.lights])
+            self.lights = []
+            for lightID in traci.trafficlight.getIDList():
+                temp = traci.trafficlight.getCompleteRedYellowGreenDefinition(lightID)
+                self.lights.append(TrafficLight(lightID, [phase._phaseDef for phase in temp[0]._phases]))
+            self.action_space = spaces.MultiDiscrete([len(light.actions) - 1 for light in self.lights])
             trafficspace = spaces.Box(low=float('-inf'), high=float('inf'),
                                       shape=(len(self.loops) * len(self.loop_variables),))
-            lightspaces = [spaces.Discrete(len(light.actions)) for light in self.lights]
-            self.observation_space = spaces.Tuple([trafficspace] + lightspaces)
+            lightspaces = spaces.MultiDiscrete([len(light.actions)-1 for light in self.lights])
+            self.observation_space = spaces.Tuple([trafficspace, lightspaces])
             self.sumo_step = 0
             self.sumo_running = True
             self.screenshot()
@@ -118,7 +112,7 @@ class TrafficEnv(Env):
         #    reward += traci.inductionloop.getLastStepVehicleNumber(loop)
         return max(reward, 0)
 
-    def _step(self, action):
+    def step(self, action):
         #action = self.action_space(action)
         self.start_sumo()
         self.sumo_step += 1
@@ -149,7 +143,7 @@ class TrafficEnv(Env):
         lightobs = [light.state for light in self.lights]
         return (trafficobs, lightobs)
 
-    def _reset(self):
+    def reset(self):
         self.stop_sumo()
         # sleep required on some systems
         if self.sleep_between_restart > 0:
