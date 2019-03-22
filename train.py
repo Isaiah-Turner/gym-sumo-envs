@@ -78,7 +78,7 @@ def main():
     else:
         network = None
         logger.info("No network configuration provided.")
-
+    print(network)
     agent = Agent.from_spec(
         spec=agent,
         kwargs=dict(
