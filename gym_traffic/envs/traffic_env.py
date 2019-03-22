@@ -35,23 +35,22 @@ class TrafficEnv(Env):
         self.loop_variables = [tc.LAST_STEP_MEAN_SPEED, tc.LAST_STEP_TIME_SINCE_DETECTION, tc.LAST_STEP_VEHICLE_NUMBER]
         self.lanes = lanes
         self.detectors = []
-        args = ["--net-file", netfile, "--route-files", tmpfile, "--additional-files", addfile]
+        self.args = ["--net-file", netfile, "--route-files", tmpfile, "--additional-files", addfile]
         if mode == "gui":
             binary = "sumo-gui"
-            args += ["-S", "-Q"]
+            addon = ["-S", "-Q"]
         else:
             binary = "sumo"
-            args += ["--no-step-log"]
-
+            addon = ["--no-step-log"]
         with open(routefile) as f:
             self.route = f.read()
         self.tmpfile = tmpfile
         self.pngfile = pngfile
-        self.sumo_cmd = [binary] + args
+        self.sumo_cmd = [binary] + self.args + addon
         self.sumo_step = 0
         self.sumo_running = False
         self.viewer = None
-        self.start_sumo()
+        self.start_sumo(True)
         self.stop_sumo()
 
     def relative_path(self, *paths):
@@ -66,10 +65,14 @@ class TrafficEnv(Env):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
-    def start_sumo(self):
+    def start_sumo(self, dataCollection=False):
         if not self.sumo_running:
             self.write_routes()
-            traci.start(self.sumo_cmd)
+            if not dataCollection:
+                traci.start(self.sumo_cmd)
+                self.screenshot()
+            else:
+                traci.start(["sumo"] + self.args + ["--no-step-log"])
             self.loops = [loopID for loopID in traci.inductionloop.getIDList()]
             for loopid in self.loops:
                 traci.inductionloop.subscribe(loopid, self.loop_variables)
@@ -85,7 +88,7 @@ class TrafficEnv(Env):
             self.observation_space = spaces.Tuple([trafficspace, lightspaces])
             self.sumo_step = 0
             self.sumo_running = True
-            self.screenshot()
+
 
     def stop_sumo(self):
         if self.sumo_running:
