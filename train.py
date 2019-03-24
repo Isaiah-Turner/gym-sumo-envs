@@ -13,7 +13,7 @@ import sys
 import gym_traffic
 
 from tensorforce import TensorForceError
-from tensorforce.agents import Agent
+from tensorforce.agents import Agent, DQNAgent
 from tensorforce.execution import Runner
 from tensorforce.contrib.openai_gym import OpenAIGym
 
@@ -79,6 +79,7 @@ def main():
         network = None
         logger.info("No network configuration provided.")
     print(network)
+    '''
     agent = Agent.from_spec(
         spec=agent,
         kwargs=dict(
@@ -87,7 +88,8 @@ def main():
             network=network,
         )
     )
-
+    '''
+    agent = DQNAgent()
     if args.load:
         load_dir = os.path.dirname(args.load)
         if not os.path.isdir(load_dir):
