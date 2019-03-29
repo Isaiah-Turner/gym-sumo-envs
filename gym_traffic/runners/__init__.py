@@ -1,1 +1,1 @@
-from simple_runner import SimpleRunner
+from gym_traffic.runners.simple_runner import SimpleRunner

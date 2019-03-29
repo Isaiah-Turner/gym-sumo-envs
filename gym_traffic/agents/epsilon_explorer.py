@@ -1,4 +1,4 @@
-from agent import Agent
+from gym_traffic.agents.agent import Agent
 
 
 class EpsilonExplorer(Agent):

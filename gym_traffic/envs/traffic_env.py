@@ -11,6 +11,7 @@ import numpy as np
 import math
 import time
 from gym_traffic.envs.traffic_lights import TrafficLightTwoWay, TrafficLight
+from gym_traffic.utils.discreteToMultiDiscrete import DiscreteToMultiDiscrete
 
 if 'SUMO_HOME' in os.environ:
     tools = os.path.join(os.environ['SUMO_HOME'], 'tools')
@@ -81,11 +82,17 @@ class TrafficEnv(Env):
             for lightID in traci.trafficlight.getIDList():
                 temp = traci.trafficlight.getCompleteRedYellowGreenDefinition(lightID)
                 self.lights.append(TrafficLight(lightID, [phase._phaseDef for phase in temp[0]._phases]))
-            self.action_space = spaces.MultiDiscrete([len(light.actions) - 1 for light in self.lights])
-            trafficspace = spaces.Box(low=float('-inf'), high=float('inf'),
+            actions = [len(light.actions) - 1 for light in self.lights]
+            mapping = {}
+            ranges = ([*range(v)] for v in actions)
+            grid = np.array(np.meshgrid(*[[*r] for r in ranges])).T.reshape(-1, 3)
+            for i in range(grid.shape[0]):
+                mapping[i] = grid[i]
+            self.action_space = DiscreteToMultiDiscrete(spaces.MultiDiscrete(actions), mapping)
+            trafficspace = spaces.Box(low=float('-inf'), high=float('inf'), dtype="int32",
                                       shape=(len(self.loops) * len(self.loop_variables),))
-            lightspaces = spaces.MultiDiscrete([len(light.actions)-1 for light in self.lights])
-            self.observation_space = spaces.Tuple([trafficspace, lightspaces])
+            lightspaces = [spaces.Discrete(len(light.actions)) for light in self.lights]
+            self.observation_space = spaces.Tuple([trafficspace]+ lightspaces)
             self.sumo_step = 0
             self.sumo_running = True
 
@@ -119,7 +126,7 @@ class TrafficEnv(Env):
         #action = self.action_space(action)
         self.start_sumo()
         self.sumo_step += 1
-        assert (len(action) == len(self.lights))
+        assert (len(self.action_space.mapping[action]) == len(self.lights))
         for act, light in zip(action, self.lights):
             signal = light.act(act)
             traci.trafficlights.setRedYellowGreenState(light.id, signal)

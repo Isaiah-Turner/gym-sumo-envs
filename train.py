@@ -79,17 +79,15 @@ def main():
         network = None
         logger.info("No network configuration provided.")
     print(network)
-    '''
     agent = Agent.from_spec(
         spec=agent,
         kwargs=dict(
             states=environment.states,
             actions=environment.actions,
-            network=network,
+            network=[{'type': 'dense', 'size': 32, 'activation': 'relu'}, {'type': 'dense', 'size': 32, 'activation': 'relu'}]
         )
     )
-    '''
-    agent = DQNAgent()
+
     if args.load:
         load_dir = os.path.dirname(args.load)
         if not os.path.isdir(load_dir):

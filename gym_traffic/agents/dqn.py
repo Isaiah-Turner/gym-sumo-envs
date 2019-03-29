@@ -1,6 +1,6 @@
 from keras.models import Model
-from keras.layers import Dense, Flatten, LeakyReLU, Input, merge, Reshape, Lambda, BatchNormalization, Dropout
-from keras.regularizers import L1L2Regularizer
+from keras.layers import Dense, Flatten, LeakyReLU, Input, merge, Reshape, Lambda, BatchNormalization, Dropout, concatenate
+from keras.regularizers import l1_l2
 from keras.utils.np_utils import to_categorical
 import numpy as np
 from gym import spaces
@@ -8,8 +8,9 @@ from keras.optimizers import Adam
 import itertools
 from keras import backend as K
 import os
-from agent import Agent
+from gym_traffic.agents.agent import Agent
 from random import shuffle
+from gym_traffic.utils.discreteToMultiDiscrete import DiscreteToMultiDiscrete
 
 
 def flatten_spaces(space):
@@ -21,10 +22,11 @@ def flatten_spaces(space):
 
 def calc_input_dim(space):
     dims = []
-    print "Space: {}".format(space)
-    print "Flattened: {}".format(flatten_spaces(space))
+    print("Space: {}".format(space))
+    print("Flattened: {}".format(flatten_spaces(space)))
     for i in flatten_spaces(space):
-        if isinstance(i, spaces.Discrete):
+        print(i)
+        if isinstance(i, spaces.Discrete) or isinstance(i, DiscreteToMultiDiscrete):
             dims.append(i.n)
         elif isinstance(i, spaces.Box):
             dims.append(np.prod(i.shape))
@@ -37,8 +39,8 @@ def concat_input(observation, input_space):
     if isinstance(input_space, spaces.Tuple):
         return np.hstack([np.array(concat_input(obs, space)) for obs, space in
                           zip(observation, input_space.spaces)])
-    elif isinstance(input_space, spaces.Discrete):
-        return to_categorical(observation, nb_classes=input_space.n).reshape((1, -1))
+    elif isinstance(input_space, spaces.Discrete) or isinstance(input_space, DiscreteToMultiDiscrete):
+        return to_categorical(observation).reshape((1, -1))
     elif isinstance(input_space, spaces.Box):
         return observation.reshape((1, -1))
     else:
@@ -71,18 +73,18 @@ class DQN(Agent):
 
     def build_network(self):
         hidden_dim = 1024
-        reg = lambda: L1L2Regularizer(l1=1e-9, l2=1e-9)
+        reg = lambda: l1_l2(l1=1e-9, l2=1e-9)
         x = Input(shape=(self.data_dim,), name="x")
         h = x
         h = Dense(hidden_dim, W_regularizer=reg())(h)
         h = Dropout(0.5)(h)
         #h = BatchNormalization(mode=1)(h)
         h = LeakyReLU(0.2)(h)
-        h = Dense(hidden_dim / 2, W_regularizer=reg())(h)
+        h = Dense(int(hidden_dim / 2), W_regularizer=reg())(h)
         h = Dropout(0.5)(h)
         #h = BatchNormalization(mode=1)(h)
         h = LeakyReLU(0.2)(h)
-        h = Dense(hidden_dim / 4, W_regularizer=reg())(h)
+        h = Dense(int(hidden_dim / 4), W_regularizer=reg())(h)
         h = Dropout(0.5)(h)
         #h = BatchNormalization(mode=1)(h)
         h = LeakyReLU(0.2)(h)
@@ -90,15 +92,18 @@ class DQN(Agent):
         # Q(s, a)
         self.Q = Model(x, y, name="Q")
 
-        action = Input(shape=(1,), dtype='int32', name="action")
+        action = Input(shape=(1,), dtype='float32', name="action")
         """
         selected_y = merge([y, action],
                            mode=lambda z: K.sum(K.one_hot(K.reshape(z[1], (-1,)), K.shape(z[0])[1]) * z[0], axis=-1,
                                                 keepdims=True), output_shape=lambda z: z[1])
                                                 """
-        selected_y = merge([y, action],
+        '''
+                selected_y = merge([y, action],
                            mode=lambda z: K.reshape(z[0][K.arange(K.shape(z[0])[0]), K.reshape(z[1], (-1,))], (-1, 1)),
                            output_shape=lambda z: z[1])
+        '''
+        selected_y = concatenate([y, action])
 
         self.Q_s = Model([x, action], selected_y, name="Q_s")
 
@@ -106,14 +111,15 @@ class DQN(Agent):
         self.V = Model(x, value, name="V")
 
         x_prime = Input(shape=(self.data_dim,), name="x_prime")
-        done = Input(shape=(1,), name="done", dtype="int32")
+        done = Input(shape=(1,), name="done", dtype="float32")
         v_prime = Lambda(lambda z: K.stop_gradient(z), output_shape=lambda z: z)(self.V(x_prime))
         # v_prime = self.V(x_prime)
         q = self.Q_s([x, action])
-
+        r_pred = concatenate([q, v_prime, done])
+        '''
         r_pred = merge([q, v_prime, done], mode=lambda z: z[0] - ((1 - z[2]) * self.discount * z[1]),
                        output_shape=lambda z: z[0])
-
+        '''
         self.training_model = Model([x, action, x_prime, done], r_pred, name="training_model")
 
         self.training_model.compile(self.optimizer, "mean_squared_error")
