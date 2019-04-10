@@ -11,13 +11,14 @@ import gym
 import gym_traffic
 from gym.wrappers import Monitor
 import gym
-import time
+import numpy as np
 from tqdm import tqdm
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.optimizers import Adam
 
 def collect_data():
-    initial_games = 10000
+    initial_games = 10
     score_requirement = {'simple': 4500}
     training_data = []
     accepted_scores = []
@@ -37,7 +38,7 @@ def collect_data():
             if len(previous_observation) > 0:
                 game_memory.append([previous_observation, action])
 
-            previous_observation = observation
+            previous_observation = list(observation)
             score += reward
             if done:
                 break
@@ -54,8 +55,28 @@ def collect_data():
         env.reset()
 
     print(accepted_scores)
-
+    print(training_data)
     return training_data
+
+
+def build_model(input_size, output_size):
+    model = Sequential()
+    model.add(Dense(128, input_dim=input_size, activation='relu'))
+    model.add(Dense(52, activation='relu'))
+    model.add(Dense(output_size, activation='linear'))
+    model.compile(loss='mse', optimizer=Adam())
+    return model
+
+
+def train_model(training_data):
+    X = np.array([i[0] for i in training_data]).reshape(-1, len(training_data[0][0]))
+    print(X[0]) # X has 990 values; each one contains: (observation list, action) as a tuple
+    y = np.array([i[1] for i in training_data]).reshape(990, 4)
+    print(y[0])
+    model = build_model(input_size=len(X[0]), output_size=len(y[0]))
+
+    model.fit(X, y, epochs=10)
+    return model
 
 
 monitor = False
@@ -68,32 +89,40 @@ env = gym.make('Traffic-Simple-cli-v0')
 #env = gym.make('Traffic-Simple-gui-v0')
 
 training_data = collect_data()
+model = train_model(training_data)
+"""
 model = Sequential()
 model.add(Dense(64, input_dim=2, activation='sigmoid'))
 model.add(Dense(sum(env.action_space.nvec), activation='linear'))
+"""
+
 if monitor:
     env = Monitor(env, "output/traffic/simple/random", force=True)
-for i_episode in tqdm(range(500)):
-    observation = env.reset()
-    for t in tqdm(range(1000)):
 
-        cars = env.get_cars_in_lanes()
-        current_state = env.get_light_actions()
-        action = env.env.action_space.sample()  # two envs are needed. The first is a time limited wrapper, the second is the actual env.
-        #time.sleep(1)
-        observation, reward, done, info = env.step(action)
-        print("Observation: ", end="")
-        print(observation[0], end="    ")
-        print(observation[1])
-        print("Reward: ", end="")
-        print(reward)
-        print("Done: ", end="")
-        print(done)
-        print("Info: ", end="")
-        print(info)
-        print("-------------------------------------------------")
-        #print "Reward: {}".format(reward)
-        if done:
-            #print("Episode finished after {} timesteps".format(t+1))
-            break
+
+
+def extra():
+    for i_episode in tqdm(range(500)):
+        observation = env.reset()
+        for t in tqdm(range(1000)):
+
+            cars = env.env.get_cars_in_lanes()
+            current_state = env.env.get_light_actions()
+            action = env.env.action_space.sample()  # two envs are needed. The first is a time limited wrapper, the second is the actual env.
+            #time.sleep(1)
+            observation, reward, done, info = env.step(action)
+            print("Observation: ", end="")
+            print(observation[0], end="    ")
+            print(observation[1])
+            print("Reward: ", end="")
+            print(reward)
+            print("Done: ", end="")
+            print(done)
+            print("Info: ", end="")
+            print(info)
+            print("-------------------------------------------------")
+            #print "Reward: {}".format(reward)
+            if done:
+                #print("Episode finished after {} timesteps".format(t+1))
+                break
 

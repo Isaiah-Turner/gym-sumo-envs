@@ -58,26 +58,31 @@ class TrafficEnv(Env):
 
     def write_routes(self):
         self.route_info = self.route_sample()
-        with open(self.tmpfile, 'w') as f:
-            f.write(Template(self.route).substitute(self.route_info)) 
+        #with open(self.tmpfile, 'w') as f:
+            #f.write(Template(self.route).substitute(self.route_info))
 
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
     def get_cars_in_lanes(self):
-        num_vehicles = []
+        obs = []
+        for loop in self.loops:
+            res = traci.inductionloop.getSubscriptionResults(loop)
+            obs.append(res[traci.constants.LAST_STEP_VEHICLE_NUMBER])
+        return obs
+        """
         if self.sumo_running:
             for light_id in traci.trafficlight.getIDList():
                 for lane_id in traci.trafficlight.getControlledLanes(light_id):
-                    num_vehicles.append(traci.lane.getSubscriptionResults(lane_id)[
-                        traci.constants.LAST_STEP_VEHICLE_NUMBER])
+                    num_vehicles.append(traci.lane.getSubscriptionResults(lane_id)[traci.constants.LAST_STEP_VEHICLE_NUMBER])
         return num_vehicles
+        """
 
     def get_light_actions(self):
         phases = []
         if self.sumo_running:
             for light_id in traci.trafficlight.getIDList():
-                phases.append(traci.trafficlight.getPhase())
+                phases.append(traci.trafficlight.getPhase(light_id))
         return phases
 
     def start_sumo(self, dataCollection=False):
@@ -159,7 +164,7 @@ class TrafficEnv(Env):
                 obs.append(res[var])
         trafficobs = np.array(obs)
         lightobs = [light.state for light in self.lights]
-        return (trafficobs, lightobs)
+        return (obs, lightobs)
 
     def reset(self):
         self.stop_sumo()
