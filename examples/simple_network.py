@@ -21,7 +21,7 @@ def collect_data():
     score_requirement = {'simple': 5000} #14000 for simple
     training_data = []
     accepted_scores = []
-    categories = [len(light.actions) - 1 for light in env.env.lights]
+    categories = [len(light.actions) for light in env.env.lights]
     t = [light.actions for light in env.env.lights]
     print(t)
     print(categories)
@@ -31,7 +31,7 @@ def collect_data():
         previous_observation = []
         for step_index in range(100):
             action = env.env.action_space.sample()
-            print(action)
+            #print(action)
             observation, reward, done, info = env.env.step(action)
 
             if len(previous_observation) > 0:

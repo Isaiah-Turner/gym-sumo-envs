@@ -99,7 +99,7 @@ class TrafficEnv(Env):
             self.action_space = spaces.MultiDiscrete([len(light.actions) for light in self.lights])
             trafficspace = spaces.Box(low=float('-inf'), high=float('inf'),
                                       shape=(len(self.loops) * len(self.loop_variables),))
-            lightspaces = spaces.MultiDiscrete([len(light.actions)-1 for light in self.lights])
+            lightspaces = spaces.MultiDiscrete([len(light.actions) for light in self.lights])
             self.observation_space = spaces.Tuple([trafficspace, lightspaces])
             self.sumo_step = 0
             self.sumo_running = True
