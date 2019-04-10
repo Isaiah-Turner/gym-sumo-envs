@@ -35,7 +35,7 @@ class TrafficEnv(Env):
         self.loop_variables = [tc.LAST_STEP_MEAN_SPEED, tc.LAST_STEP_TIME_SINCE_DETECTION, tc.LAST_STEP_VEHICLE_NUMBER]
         self.lanes = lanes
         self.detectors = []
-        self.args = ["--net-file", netfile, "--route-files", tmpfile, "--additional-files", addfile]
+        self.args = ["--net-file", netfile, "--route-files", tmpfile, "--additional-files", addfile, "-W"]
         if mode == "gui":
             binary = "sumo-gui"
             addon = ["-S", "-Q"]
