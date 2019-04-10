@@ -18,14 +18,14 @@ from keras.layers import Dense
 
 def collect_data():
     initial_games = 10000
-    score_requirement = {'simple': 5000} #14000 for simple
+    score_requirement = {'simple': 4500}
     training_data = []
     accepted_scores = []
     categories = [len(light.actions) for light in env.env.lights]
     t = [light.actions for light in env.env.lights]
     print(t)
     print(categories)
-    for game_index in range(initial_games):
+    for game_index in tqdm(range(initial_games)):
         score = 0
         game_memory = []
         previous_observation = []
@@ -41,14 +41,14 @@ def collect_data():
             score += reward
             if done:
                 break
-        print(score)
+        tqdm.write("Score: %i " % score)
         if score >= score_requirement['simple']:
             accepted_scores.append(score)
             for data in game_memory:
                 one_hot = []
                 for light_index, selected_action in enumerate(data[1]):
                     one_hot.append([0 if i != selected_action else 1 for i in range(categories[light_index])])
-                print(one_hot)
+                #print(one_hot)
                 training_data.append([data[0], one_hot])
 
         env.reset()
@@ -59,15 +59,15 @@ def collect_data():
 
 
 monitor = False
-env = gym.make('Traffic-Simple-gui-v0')
-#env = gym.make('Traffic-Simple-cli-v0')
+#env = gym.make('Traffic-Simple-gui-v0')
+env = gym.make('Traffic-Simple-cli-v0')
 #env = gym.make('Traffic-DCMed-gui-v0')
 #env = gym.make('Traffic-2way-gui-v0')
 #env = gym.make('Traffic-litteRiver-gui-v0')
 #env = gym.make('Traffic-yIntersection-gui-v0')
 #env = gym.make('Traffic-Simple-gui-v0')
 
-collect_data()
+training_data = collect_data()
 model = Sequential()
 model.add(Dense(64, input_dim=2, activation='sigmoid'))
 model.add(Dense(sum(env.action_space.nvec), activation='linear'))
