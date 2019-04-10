@@ -7,11 +7,11 @@
 		<phase duration="28.711" state="GGGrGr" />
 		<phase duration="1.289" state="yyyryr" />
 	</tlLogic>
-	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_EW_1_0" lane="EW_1_0" length="42.8" pos="0"/>
-	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_EW_1_1" lane="EW_1_1" length="42.8" pos="0"/>
-	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_NS_1_0" lane="NS_1_0" length="39.599999999999994" pos="0"/>
-	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_WE_1_0" lane="WE_1_0" length="42.8" pos="0"/>
-	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_WE_1_1" lane="WE_1_1" length="42.8" pos="0"/>
+	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_EW_1_0" lane="EW_1_0" length="42.8" pos="-10"/>
+	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_EW_1_1" lane="EW_1_1" length="42.8" pos="-10"/>
+	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_NS_1_0" lane="NS_1_0" length="39.6" pos="-10"/>
+	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_WE_1_0" lane="WE_1_0" length="42.8" pos="-10"/>
+	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_WE_1_1" lane="WE_1_1" length="42.8" pos="-10"/>
     <e3Detector id="e3_gneJ1" freq="1" file="out.xml">
         <detEntry lane="EW_1_0" pos="46.4"/>
         <detEntry lane="NS_1_0" pos="44.80"/>

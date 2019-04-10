@@ -64,6 +64,21 @@ class TrafficEnv(Env):
     def _seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
+    def get_cars_in_lanes(self):
+        num_vehicles = []
+        if self.sumo_running:
+            for light_id in traci.trafficlight.getIDList():
+                for lane_id in traci.trafficlight.getControlledLanes(light_id):
+                    num_vehicles.append(traci.lane.getSubscriptionResults(lane_id)[
+                        traci.constants.LAST_STEP_VEHICLE_NUMBER])
+        return num_vehicles
+
+    def get_light_actions(self):
+        phases = []
+        if self.sumo_running:
+            for light_id in traci.trafficlight.getIDList():
+                phases.append(traci.trafficlight.getPhase())
+        return phases
 
     def start_sumo(self, dataCollection=False):
         if not self.sumo_running:
@@ -81,7 +96,7 @@ class TrafficEnv(Env):
             for lightID in traci.trafficlight.getIDList():
                 temp = traci.trafficlight.getCompleteRedYellowGreenDefinition(lightID)
                 self.lights.append(TrafficLight(lightID, [phase._phaseDef for phase in temp[0]._phases]))
-            self.action_space = spaces.MultiDiscrete([len(light.actions) - 1 for light in self.lights])
+            self.action_space = spaces.MultiDiscrete([len(light.actions) for light in self.lights])
             trafficspace = spaces.Box(low=float('-inf'), high=float('inf'),
                                       shape=(len(self.loops) * len(self.loop_variables),))
             lightspaces = spaces.MultiDiscrete([len(light.actions)-1 for light in self.lights])

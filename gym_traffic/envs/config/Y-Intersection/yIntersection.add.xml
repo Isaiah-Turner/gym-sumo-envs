@@ -7,9 +7,9 @@
 		<phase duration="28.879" state="GGGrrr" />
 		<phase duration="1.121" state="yyyrrr" />
 	</tlLogic>
-	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_EW_1_0" lane="EW_1_0" length="30" pos="0"/>
-    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_NS_1_0" lane="NS_1_0" length="30" pos="0"/>
-    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_WE_1_0" lane="WE_1_0" length="30" pos="0"/>
+	<e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_EW_1_0" lane="EW_1_0" length="30" pos="-10"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_NS_1_0" lane="NS_1_0" length="30" pos="-10"/>
+    <e1Detector file="out.xml" freq="1" friendlyPos="x" id="e1det_WE_1_0" lane="WE_1_0" length="30" pos="-10"/>
 	<e3Detector id="e3_gneJ1" freq="1" file="out.xml">
         <detEntry lane="EW_1_0" pos="53.68"/>
         <detEntry lane="NS_1_0" pos="47.78"/>

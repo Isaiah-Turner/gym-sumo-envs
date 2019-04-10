@@ -7,10 +7,10 @@ from tqdm import tqdm
 monitor = False
 #env = gym.make('Traffic-Simple-gui-v0')
 #env = gym.make('Traffic-Simple-cli-v0')
-env = gym.make('Traffic-DCMed-gui-v0')
+#env = gym.make('Traffic-DCMed-gui-v0')
 #env = gym.make('Traffic-2way-gui-v0')
 #env = gym.make('Traffic-litteRiver-gui-v0')
-#env = gym.make('Traffic-yIntersection-gui-v0')
+env = gym.make('Traffic-yIntersection-gui-v0')
 #env = gym.make('Traffic-Simple-gui-v0')
 if monitor:
     env = Monitor(env, "output/traffic/simple/random", force=True)
