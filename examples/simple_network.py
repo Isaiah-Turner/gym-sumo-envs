@@ -13,9 +13,10 @@ from gym.wrappers import Monitor
 import gym
 import numpy as np
 from tqdm import tqdm
-from keras.models import Sequential
+from keras.models import Sequential, load_model
 from keras.layers import Dense
 from keras.optimizers import Adam
+
 
 def collect_data():
     initial_games = 10
@@ -50,7 +51,7 @@ def collect_data():
                 for light_index, selected_action in enumerate(data[1]):
                     one_hot.append([0 if i != selected_action else 1 for i in range(categories[light_index])])
                 #print(one_hot)
-                training_data.append([data[0], one_hot])
+                training_data.append([[i for list in data[0] for i in list], one_hot])
 
         env.reset()
 
@@ -68,15 +69,56 @@ def build_model(input_size, output_size):
     return model
 
 
-def train_model(training_data):
+def train_model(training_data, model=None):
     X = np.array([i[0] for i in training_data]).reshape(-1, len(training_data[0][0]))
-    print(X[0]) # X has 990 values; each one contains: (observation list, action) as a tuple
-    y = np.array([i[1] for i in training_data]).reshape(990, 4)
+    print(X[0])  # X has 990 values; each one contains: (observation list, action) as a tuple
+    y = np.array([i[1] for i in training_data]).reshape(X.shape[0], len(training_data[0][1][0]))
     print(y[0])
-    model = build_model(input_size=len(X[0]), output_size=len(y[0]))
-
+    if not model:
+        model = build_model(input_size=len(X[0]), output_size=len(y[0]))
+        print('building model')
+    else:
+        print('model already built')
     model.fit(X, y, epochs=10)
     return model
+
+
+def run_simulation():
+    for i_episode in tqdm(range(2)):
+        observation = env.reset()
+        prev_obs = []
+        while True:
+            score = 0
+            t=0
+            cars = env.env.get_cars_in_lanes()
+            current_state = env.env.get_light_actions()
+            if not prev_obs:
+                action = env.env.action_space.sample()  # two envs are needed. The first is a time limited wrapper, the second is the actual env.
+            else:
+                prev_obs = [i for part in prev_obs for i in part]
+                network_input = np.asarray(prev_obs).reshape(-1, len(prev_obs))
+                predict = model.predict(network_input)
+                action = [np.argmax(predict[0])]
+            #time.sleep(1)
+            observation, reward, done, info = env.step(action)
+            score += reward
+            t += 1
+            prev_obs = observation
+            #print("Observation: ", end="")
+            #print(observation[0], end="    ")
+           # print(observation[1])
+            #print("Reward: ", end="")
+            #print(reward)
+            #print("Done: ", end="")
+            #print(done)
+            #print("Info: ", end="")
+           # print(info)
+            #print("-------------------------------------------------")
+            #print "Reward: {}".format(reward)
+            if done:
+                print("Episode finished after {} timesteps".format(t+1))
+                print(score)
+                break
 
 
 monitor = False
@@ -89,7 +131,15 @@ env = gym.make('Traffic-Simple-cli-v0')
 #env = gym.make('Traffic-Simple-gui-v0')
 
 training_data = collect_data()
-model = train_model(training_data)
+try:
+    f = open('simple.h5', 'r')
+    model = load_model('simple.h5')
+    model = train_model(training_data, model)
+except FileNotFoundError:
+    model = train_model(training_data)
+    pass
+model.save('simple.h5')
+run_simulation()
 """
 model = Sequential()
 model.add(Dense(64, input_dim=2, activation='sigmoid'))
@@ -98,31 +148,3 @@ model.add(Dense(sum(env.action_space.nvec), activation='linear'))
 
 if monitor:
     env = Monitor(env, "output/traffic/simple/random", force=True)
-
-
-
-def extra():
-    for i_episode in tqdm(range(500)):
-        observation = env.reset()
-        for t in tqdm(range(1000)):
-
-            cars = env.env.get_cars_in_lanes()
-            current_state = env.env.get_light_actions()
-            action = env.env.action_space.sample()  # two envs are needed. The first is a time limited wrapper, the second is the actual env.
-            #time.sleep(1)
-            observation, reward, done, info = env.step(action)
-            print("Observation: ", end="")
-            print(observation[0], end="    ")
-            print(observation[1])
-            print("Reward: ", end="")
-            print(reward)
-            print("Done: ", end="")
-            print(done)
-            print("Info: ", end="")
-            print(info)
-            print("-------------------------------------------------")
-            #print "Reward: {}".format(reward)
-            if done:
-                #print("Episode finished after {} timesteps".format(t+1))
-                break
-
