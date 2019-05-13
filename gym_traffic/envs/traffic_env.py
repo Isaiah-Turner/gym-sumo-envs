@@ -1,8 +1,6 @@
 from gym import Env
 from gym import error, spaces, utils
 from gym.utils import seeding
-import traci
-import traci.constants as tc
 from scipy.misc import imread
 from gym import spaces
 from string import Template
@@ -18,6 +16,8 @@ if 'SUMO_HOME' in os.environ:
 else:
     sys.exit("please declare environment variable 'SUMO_HOME'")
 
+import traci
+import traci.constants as tc
 
 class TrafficEnv(Env):
     metadata = {'render.modes': ['human', 'rgb_array']}
