@@ -19,14 +19,15 @@ from keras.optimizers import Adam
 
 
 def collect_data():
-    initial_games = 10
-    score_requirement = {'simple': 4500}
+    initial_games = 100
+    score_requirement = {'simple': 5000}
     training_data = []
     accepted_scores = []
     categories = [len(light.actions) for light in env.env.lights]
     t = [light.actions for light in env.env.lights]
-    print(t)
-    print(categories)
+    #print(t)
+    #print(categories)
+    accepted_runs = 0;
     for game_index in tqdm(range(initial_games)):
         score = 0
         game_memory = []
@@ -44,7 +45,8 @@ def collect_data():
             if done:
                 break
         tqdm.write("Score: %i " % score)
-        if score >= score_requirement['simple']:
+        if score >= score_requirement[network]:
+            accepted_runs += 1
             accepted_scores.append(score)
             for data in game_memory:
                 one_hot = []
@@ -55,8 +57,9 @@ def collect_data():
 
         env.reset()
 
-    print(accepted_scores)
-    print(training_data)
+    #(accepted_scores)
+    #print(training_data)
+    print("Accepted runs: %i" % accepted_runs)
     return training_data
 
 
@@ -71,25 +74,25 @@ def build_model(input_size, output_size):
 
 def train_model(training_data, model=None):
     X = np.array([i[0] for i in training_data]).reshape(-1, len(training_data[0][0]))
-    print(X[0])  # X has 990 values; each one contains: (observation list, action) as a tuple
+    #print(X[0])  # X has 990 values; each one contains: (observation list, action) as a tuple
     y = np.array([i[1] for i in training_data]).reshape(X.shape[0], len(training_data[0][1][0]))
-    print(y[0])
+    #print(y[0])
     if not model:
         model = build_model(input_size=len(X[0]), output_size=len(y[0]))
         print('building model')
     else:
         print('model already built')
-    model.fit(X, y, epochs=10)
+    model.fit(X, y, epochs=50)
     return model
 
 
 def run_simulation():
-    for i_episode in tqdm(range(2)):
+    for i_episode in tqdm(range(1)):
         observation = env.reset()
         prev_obs = []
+        score = 0
+        t = 0
         while True:
-            score = 0
-            t=0
             cars = env.env.get_cars_in_lanes()
             current_state = env.env.get_light_actions()
             if not prev_obs:
@@ -122,8 +125,10 @@ def run_simulation():
 
 
 monitor = False
+network = "yIntersection"
+env = gym.make('Traffic-'+network+'-cli-v0')
 #env = gym.make('Traffic-Simple-gui-v0')
-env = gym.make('Traffic-Simple-cli-v0')
+#env = gym.make('Traffic-Simple-cli-v0')
 #env = gym.make('Traffic-DCMed-gui-v0')
 #env = gym.make('Traffic-2way-gui-v0')
 #env = gym.make('Traffic-litteRiver-gui-v0')
@@ -132,13 +137,13 @@ env = gym.make('Traffic-Simple-cli-v0')
 
 training_data = collect_data()
 try:
-    f = open('simple.h5', 'r')
-    model = load_model('simple.h5')
-    model = train_model(training_data, model)
+    f = open(network + '.h5', 'r')
+    model = load_model(network + '.h5')
+    #model = train_model(training_data, model)
 except FileNotFoundError:
     model = train_model(training_data)
     pass
-model.save('simple.h5')
+model.save(network + '.h5')
 run_simulation()
 """
 model = Sequential()
