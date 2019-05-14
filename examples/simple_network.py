@@ -20,7 +20,7 @@ from keras.optimizers import Adam
 
 def collect_data():
     initial_games = 100
-    score_requirement = {'simple': 5000}
+    score_requirement = {'yIntersection': 5000}
     training_data = []
     accepted_scores = []
     categories = [len(light.actions) for light in env.env.lights]
