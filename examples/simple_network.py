@@ -19,7 +19,7 @@ from keras.optimizers import Adam
 
 
 def collect_data():
-    initial_games = 300
+    initial_games = 1
     score_requirement = {'simple': 5000, 'yIntersection': 5000}
     training_data = []
     accepted_scores = []
@@ -126,7 +126,7 @@ def run_simulation():
 
 monitor = False
 network = "yIntersection"
-env = gym.make('Traffic-'+network+'-cli-v0')
+env = gym.make('Traffic-'+network+'-gui-v0')
 #env = gym.make('Traffic-Simple-gui-v0')
 #env = gym.make('Traffic-Simple-cli-v0')
 #env = gym.make('Traffic-DCMed-gui-v0')
@@ -135,13 +135,13 @@ env = gym.make('Traffic-'+network+'-cli-v0')
 #env = gym.make('Traffic-yIntersection-gui-v0')
 #env = gym.make('Traffic-Simple-gui-v0')
 
-training_data = collect_data()
+#training_data = collect_data()
 try:
     f = open(network + '.h5', 'r')
     model = load_model(network + '.h5')
-    #model = train_model(training_data, model)
+   # model = train_model(training_data, model)
 except FileNotFoundError:
-    model = train_model(training_data)
+    #model = train_model(training_data)
     pass
 model.save(network + '.h5')
 run_simulation()
