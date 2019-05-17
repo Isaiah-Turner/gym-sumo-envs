@@ -147,7 +147,7 @@ class TrafficEnv(Env):
         traci.simulationStep()
         observation = self._observation()
         reward = self._reward()
-        done = self.sumo_step > self.simulation_end
+        done = not traci.simulation.getMinExpectedNumber() > 0 #self.sumo_step > self.simulation_end
         self.screenshot()
         if done:
             self.stop_sumo()
