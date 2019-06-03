@@ -19,15 +19,15 @@ from keras.optimizers import Adam
 
 
 def collect_data():
-    initial_games = 300
-    score_requirement = {'simple': 5000, 'yIntersection': 5000}
+    initial_games = 100
+    score_requirement = {'simple': 5000, 'yIntersection': 4500}
     training_data = []
     accepted_scores = []
     categories = [len(light.actions) for light in env.env.lights]
     t = [light.actions for light in env.env.lights]
     #print(t)
     #print(categories)
-    accepted_runs = 0;
+    accepted_runs = 0
     for game_index in tqdm(range(initial_games)):
         score = 0
         game_memory = []
@@ -60,7 +60,7 @@ def collect_data():
     #(accepted_scores)
     #print(training_data)
     print("Accepted runs: %i" % accepted_runs)
-    return training_data
+    return training_data, accepted_runs
 
 
 def build_model(input_size, output_size):
@@ -82,7 +82,7 @@ def train_model(training_data, model=None):
         print('building model')
     else:
         print('model already built')
-    model.fit(X, y, epochs=50)
+    model.fit(X, y, epochs=max(10, int(runs/10)))
     return model
 
 
@@ -127,6 +127,7 @@ def run_simulation():
 monitor = False
 network = "yIntersection"
 env = gym.make('Traffic-'+network+'-cli-v0')
+env._max_episode_steps = 10000
 #env = gym.make('Traffic-Simple-gui-v0')
 #env = gym.make('Traffic-Simple-cli-v0')
 #env = gym.make('Traffic-DCMed-gui-v0')
@@ -134,12 +135,11 @@ env = gym.make('Traffic-'+network+'-cli-v0')
 #env = gym.make('Traffic-litteRiver-gui-v0')
 #env = gym.make('Traffic-yIntersection-gui-v0')
 #env = gym.make('Traffic-Simple-gui-v0')
-
-training_data = collect_data()
+training_data, runs = collect_data()
 try:
     f = open(network + '.h5', 'r')
     model = load_model(network + '.h5')
-    #model = train_model(training_data, model)
+    model = train_model(training_data, model)
 except FileNotFoundError:
     model = train_model(training_data)
     pass

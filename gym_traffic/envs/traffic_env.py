@@ -102,7 +102,7 @@ class TrafficEnv(Env):
             self.lights = []
             for lightID in traci.trafficlight.getIDList():
                 temp = traci.trafficlight.getCompleteRedYellowGreenDefinition(lightID)
-                self.lights.append(TrafficLight(lightID, [phase._phaseDef for phase in temp[0]._phases]))
+                self.lights.append(TrafficLight(lightID, [phase._phaseDef for phase in temp[-1]._phases]))
             self.action_space = spaces.Box(low=np.array([0 for light in self.lights]), high=np.array([len(light.actions)-1 for light in self.lights]), dtype=np.float32)
             trafficspace = spaces.Box(low=float('-inf'), high=float('inf'),
                                       shape=(len(self.loops) * len(self.loop_variables),))
