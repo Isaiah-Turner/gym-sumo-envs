@@ -26,6 +26,7 @@ class TrafficEnv(Env):
                  tmpfile="tmp.rou.xml",
                  pngfile="tmp.png", mode="gui", simulation_end=10000, sleep_between_restart=1):
         # "--end", str(simulation_end),
+        self.num_envs=1
         print(routefile)
         self.simulation_end = simulation_end
         self.sleep_between_restart = sleep_between_restart
@@ -42,7 +43,7 @@ class TrafficEnv(Env):
             addon = ["-S", "-Q"]
         else:
             binary = "sumo"
-            addon = ["--no-step-log"]
+            addon = ["--no-step-log", "--duration-log.statistics"]
         with open(routefile) as f:
             self.route = f.read()
         self.tmpfile = tmpfile
@@ -102,19 +103,21 @@ class TrafficEnv(Env):
             for lightID in traci.trafficlight.getIDList():
                 temp = traci.trafficlight.getCompleteRedYellowGreenDefinition(lightID)
                 self.lights.append(TrafficLight(lightID, [phase._phaseDef for phase in temp[0]._phases]))
-            self.action_space = spaces.MultiDiscrete([[0,len(light.actions)-1] for light in self.lights])
+            self.action_space = spaces.Box(low=np.array([0 for light in self.lights]), high=np.array([len(light.actions)-1 for light in self.lights]), dtype=np.float32)
             trafficspace = spaces.Box(low=float('-inf'), high=float('inf'),
                                       shape=(len(self.loops) * len(self.loop_variables),))
-            lightspaces = spaces.MultiDiscrete([[0,len(light.actions)-1] for light in self.lights])
-            self.observation_space = spaces.Tuple([trafficspace, lightspaces])
+            lightspaces = spaces.MultiDiscrete([len(light.actions) for light in self.lights])
+            self.observation_space = trafficspace
             self.sumo_step = 0
             self.sumo_running = True
 
 
     def stop_sumo(self):
+        print(self.sumo_step)
         if self.sumo_running:
             traci.close()
             self.sumo_running = False
+            print("Simulation Finished")
 
     def _reward(self):
         # reward = 0.0
@@ -142,12 +145,13 @@ class TrafficEnv(Env):
         self.sumo_step += 1
         assert (len(action) == len(self.lights))
         for act, light in zip(action, self.lights):
+            act = int(math.floor(act))
             signal = light.act(act)
             traci.trafficlights.setRedYellowGreenState(light.id, signal)
         traci.simulationStep()
         observation = self._observation()
         reward = self._reward()
-        done = self.sumo_step > self.simulation_end
+        done = traci.simulation.getMinExpectedNumber() <= 0
         self.screenshot()
         if done:
             self.stop_sumo()
@@ -165,7 +169,7 @@ class TrafficEnv(Env):
                 obs.append(res[var])
         trafficobs = np.array(obs)
         lightobs = [light.state for light in self.lights]
-        return (obs, lightobs)
+        return obs
 
     def reset(self):
         self.stop_sumo()

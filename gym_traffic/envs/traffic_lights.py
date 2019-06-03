@@ -6,7 +6,11 @@ class TrafficLight(object):
         self.actions = actions
 
     def signal(self):
-        return self.actions[self.state]
+        try:
+            return self.actions[self.state]
+        except:
+            print("The length of actions is {} but state was {}".format(len(self.actions),self.state))
+            return self.actions[len(self.actions)-1]
 
     def act(self, action):
         if action != self.state and self.action_allowed(action):

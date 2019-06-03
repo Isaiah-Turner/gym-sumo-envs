@@ -3,8 +3,10 @@ from gym_traffic.envs.traffic_lights import TrafficLightTwoWay
 import os
 
 
+
 class TrafficEnvSimple(TrafficEnv):
     def __init__(self, mode="gui", network="simple", prefix="traffic"):
+        self.num_envs=1
         lights = [TrafficLightTwoWay(id="0", yield_time=5)] if network == "simple" else []
         loops = ["loop{}".format(i) for i in range(12)]
         lanes = ["n_0_0", "s_0_0", "e_0_0", "w_0_0", "0_n_0", "0_s_0", "0_e_0", "0_w_0"]
@@ -15,7 +17,7 @@ class TrafficEnvSimple(TrafficEnv):
         addfile = os.path.join(basepath,  prefix + ".add.xml")
         exitloops = ["loop4", "loop5", "loop6", "loop7"]
         super(TrafficEnvSimple, self).__init__(mode=mode, lights=lights, netfile=netfile, routefile=routefile,
-                                               addfile=addfile, guifile=guifile, simulation_end=300,
+                                               addfile=addfile, guifile=guifile,
                                                lanes=lanes, exitloops=exitloops)
 
     def route_sample(self):
